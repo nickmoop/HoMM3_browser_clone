@@ -1,0 +1,109 @@
+<script type="text/javascript" src="https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jqueryjs/jquery-1.3.2.js"></script>
+<p>CHANGE PLAYER PAGE</p>
+<form method="post">
+    {% csrf_token %}
+    <output name="error_message" id="error_message">{{error_message}}</output>
+    <p><a href="/heroes/castle">CASTLE</a></p>
+    <p>''''''''''''''''''''''''''''''''''''''''''''''</p>
+    <p>NICK NAME :</p>
+    <input type="text" name="nick_name" id="nick_name" value="{{ player.nick_name }}">
+    <p>AVATAR :</p>
+    <input type="text" name="avatar" id="avatar" value="{{ player.avatar }}">
+    <p>RATING :</p>
+    <input type="text" name="rating" id="rating" value="{{ player.rating }}">
+    <p>WIN COUNT :</p>
+    <input type="text" name="win_count" id="win_count" value="{{ player.win_count }}">
+    <p>LOOSE COUNT :</p>
+    <input type="text" name="loose_count" id="loose_count" value="{{ player.loose_count }}">
+    <p>LEVEL :</p>
+    <input type="text" name="level" id="level" value="{{ player.level }}">
+    <p>EXPERIENCE :</p>
+    <input type="text" name="experience" id="experience" value="{{ player.experience }}">
+    <p>SKILLS :</p>
+    <input type="text" name="skills" id="skills" value="{{ player.skills }}">
+    <p>SPECIAL :</p>
+    <input type="text" name="special" id="special" value="{{ player.special }}">
+    <p>ATTRIBUTES :</p>
+    <input type="text" name="attributes" id="attributes" value="{{ player.attributes }}">
+    <p>SPELLS :</p>
+    <input type="text" name="spells" id="spells" value="{{ player.spells }}">
+    <button type="button" onclick="changePlayer();">CHANGE PLAYER</button>
+</form>
+<script>
+
+    var changePlayer = function() {
+        var nick_name = $("#nick_name").val()
+        var avatar = $("#avatar").val()
+        var rating = $("#rating").val()
+        var win_count = $("#win_count").val()
+        var loose_count = $("#loose_count").val()
+        var level = $("#level").val()
+        var experience = $("#experience").val()
+        var skills = $("#skills").val()
+        var special = $("#special").val()
+        var attributes = $("#attributes").val()
+        var spells = $("#spells").val()
+        var data = { 
+            nick_name:nick_name,
+            avatar:avatar,
+            rating:rating,
+            win_count:win_count,
+            loose_count:loose_count,
+            level:level,
+            experience:experience,
+            skills:skills,
+            special:special,
+            attributes:attributes,
+            spells:spells,
+        };
+        $.ajax
+        ({
+            type     : "POST",
+            url      : "change_player",
+            data     : data,
+            success  : function(response)
+            {
+                if(response) {
+                    var redirect_url = JSON.parse(response).redirect_url;
+                    var error_message = JSON.parse(response).error_message;
+                    console.log('in send: ' + redirect_url + ' ' + error_message);
+                    if (redirect_url)
+                            location.href = redirect_url;
+                    if (error_message)
+                            $('#error_message').html(error_message.replace("']", "").replace("['", "").replace("[]", ""));
+                }
+                else
+                    console.log('in send:pass((');
+            }
+        });
+    };
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+</script>

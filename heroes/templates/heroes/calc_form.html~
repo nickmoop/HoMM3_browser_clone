@@ -1,0 +1,32 @@
+{% url 'calculator' %}
+<form action="#" method="get">
+    {{current_print}}
+    <table id="tableCalci">
+    <tr id="row1">
+    <td colspan="4"></td>
+    <tr class="hover">
+    <td><input type="submit" class="btn" value="1" name="num_val"></td>
+    <td><input type="submit" class="btn" value="2" name="num_val"></td>
+    <td><input type="submit" class="btn" value="3" name="num_val"></td>
+    <td><input type="submit" class="btn" value="+" name="op_val"></td>
+    </tr>
+    <tr class="hover">
+    <td><input type="submit" class="btn" value="4" name="num_val"></td>
+    <td><input type="submit" class="btn" value="5" name="num_val"></td>
+    <td><input type="submit" class="btn" value="6" name="num_val"></td>
+    <td><input type="submit" class="btn" value="-" name="op_val"></td>
+    </tr>
+    <tr class="hover">
+    <td><input type="submit" class="btn" value="7" name="num_val"></td>
+    <td><input type="submit" class="btn" value="8" name="num_val"></td>
+    <td><input type="submit" class="btn" value="9" name="num_val"></td>
+    <td><input type="submit" class="btn" value="*" name="op_val"></td>
+    </tr>
+    <tr class="hover">
+    <td><input type="submit" class="btn" value="C" name="op_val"></td>
+    <td><input type="submit" class="btn" value="0" name="num_val"></td>
+    <td><input type="submit" class="btn" value="=" name="op_val"></td>
+    <td><input type="submit" class="btn" value="/" name="op_val"></td>
+    </tr>
+</form>
+{% url 'calculator' %}

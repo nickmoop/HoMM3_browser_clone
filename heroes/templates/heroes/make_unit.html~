@@ -1,0 +1,164 @@
+<script type="text/javascript" src="https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jqueryjs/jquery-1.3.2.js"></script>
+<p>MAKE UNIT PAGE</p>
+<form method="post">
+    {% csrf_token %}
+    {% for value in form %}
+        <p>{{ value.label }} :</p>
+        <p><input type="text" name="{{ value.name }}" id="{{ value.name }}"></p>
+    {% endfor %}
+    <button type="button" onclick="makeUnit();">MAKE</button>
+    <output name="error_message" id="error_message">{{error_message}}</output>
+    <p><a href="/heroes/castle">CASTLE</a></p>
+    {% for unit in units %}
+        <p>''''''''''''''''''''''''''''''''''''''''''''''</p>
+            <p>CASTLE :</p>
+            <input type="text" name="{{ unit.castle }}_{{ unit.name }}_castle" id="{{ unit.castle }}_{{ unit.name }}_castle" value="{{ unit.castle }}">
+            <p>NAME :</p>
+            <input type="text" name="{{ unit.castle }}_{{ unit.name }}_name" id="{{ unit.castle }}_{{ unit.name }}_name" value="{{ unit.name }}">
+            <p>ATTACK SKILL :</p>
+            <input type="text" name="{{ unit.castle }}_{{ unit.name }}_attack_skill" id="{{ unit.castle }}_{{ unit.name }}_attack_skill" value="{{ unit.attack_skill }}">
+            <p>DEFENCE SKILL :</p>
+            <input type="text" name="{{ unit.castle }}_{{ unit.name }}_defense_skill" id="{{ unit.castle }}_{{ unit.name }}_defense_skill" value="{{ unit.defense_skill }}">
+            <p>MIN MELEE DMG :</p>
+            <input type="text" name="{{ unit.castle }}_{{ unit.name }}_minimum_melee_damage" id="{{ unit.castle }}_{{ unit.name }}_minimum_melee_damage" value="{{ unit.minimum_melee_damage }}">
+            <p>MAX MELEE DMG :</p>
+            <input type="text" name="{{ unit.castle }}_{{ unit.name }}_maximum_melee_damage" id="{{ unit.castle }}_{{ unit.name }}_maximum_melee_damage" value="{{ unit.maximum_melee_damage }}">
+            <p>MIN RANGE DMG :</p>
+            <input type="text" name="{{ unit.castle }}_{{ unit.name }}_minimum_range_damage" id="{{ unit.castle }}_{{ unit.name }}_minimum_range_damage" value="{{ unit.minimum_range_damage }}">
+            <p>MAX RANGE DMG :</p>
+            <input type="text" name="{{ unit.castle }}_{{ unit.name }}_maximum_range_damage" id="{{ unit.castle }}_{{ unit.name }}_maximum_range_damage" value="{{ unit.maximum_range_damage }}">
+            <p>HEALTH :</p>
+            <input type="text" name="{{ unit.castle }}_{{ unit.name }}_health" id="{{ unit.castle }}_{{ unit.name }}_health" value="{{ unit.health }}">
+            <p>SPEED :</p>
+            <input type="text" name="{{ unit.castle }}_{{ unit.name }}_speed" id="{{ unit.castle }}_{{ unit.name }}_speed" value="{{ unit.speed }}">
+            <p>GROWTH :</p>
+            <input type="text" name="{{ unit.castle }}_{{ unit.name }}_growth" id="{{ unit.castle }}_{{ unit.name }}_growth" value="{{ unit.growth }}">
+            <p>SPECIAL :</p>
+            <input type="text" name="{{ unit.castle }}_{{ unit.name }}_special" id="{{ unit.castle }}_{{ unit.name }}_special" value="{{ unit.special }}">
+            <button type="button" onclick="changeUnit('{{ unit.castle }}', '{{ unit.name }}');">CHANGE UNIT</button>
+    {% endfor %}
+</form>
+<script>
+    var changeUnit = function(current_unit_castle, current_unit_name) {
+        var str = "#"
+        var res = str.concat(current_unit_castle, "_", current_unit_name, "_")
+        var castle = $(res.concat("castle")).val()
+        var name = $(res.concat("name")).val()
+        var attack_skill = $(res.concat("attack_skill")).val()
+        var defense_skill = $(res.concat("defense_skill")).val()
+        var minimum_melee_damage = $(res.concat("minimum_melee_damage")).val()
+        var maximum_melee_damage = $(res.concat("maximum_melee_damage")).val()
+        var health = $(res.concat("health")).val()
+        var speed = $(res.concat("speed")).val()
+        var growth = $(res.concat("growth")).val()
+        var special = $(res.concat("special")).val()
+        var data = {
+            current_unit_castle:current_unit_castle,
+            current_unit_name:current_unit_name,
+            castle:castle,
+            name:name,
+            attack_skill:attack_skill,
+            defense_skill:defense_skill,
+            minimum_melee_damage:minimum_melee_damage,
+            maximum_melee_damage:maximum_melee_damage,
+            health:health,
+            speed:speed,
+            growth:growth,
+            special:special,
+        };
+        $.ajax
+        ({
+            type     : "POST",
+            url      : "change_unit",
+            data     : data,
+            success  : function(response)
+            {
+                if(response) {
+                    var redirect_url = JSON.parse(response).redirect_url;
+                    var error_message = JSON.parse(response).error_message;
+                    console.log('in send: ' + redirect_url + ' ' + error_message);
+                    if (redirect_url)
+                            location.href = redirect_url;
+                    if (error_message)
+                            $('#error_message').html(error_message.replace("']", "").replace("['", "").replace("[]", ""));
+                }
+                else
+                    console.log('in send:pass((');
+            }
+        });
+    };
+
+    var makeUnit = function() {
+        var castle = $("#castle").val()
+        var name = $("#name").val()
+        var attack_skill = $("#attack_skill").val()
+        var defense_skill = $("#defense_skill").val()
+        var minimum_melee_damage = $("#minimum_melee_damage").val()
+        var maximum_melee_damage = $("#maximum_melee_damage").val()
+        var health = $("#health").val()
+        var speed = $("#speed").val()
+        var growth = $("#growth").val()
+        var special = $("#special").val()
+        var data = { 
+            castle:castle,
+            name:name,
+            attack_skill:attack_skill,
+            defense_skill:defense_skill,
+            minimum_melee_damage:minimum_melee_damage,
+            maximum_melee_damage:maximum_melee_damage,
+            health:health,
+            speed:speed,
+            growth:growth,
+            special:special,
+        };
+        $.ajax
+        ({
+            type     : "POST",
+            url      : "make_unit",
+            data     : data,
+            success  : function(response)
+            {
+                if(response) {
+                    var redirect_url = JSON.parse(response).redirect_url;
+                    var error_message = JSON.parse(response).error_message;
+                    console.log('in send: ' + redirect_url + ' ' + error_message);
+                    if (redirect_url)
+                            location.href = redirect_url;
+                    if (error_message)
+                            $('#error_message').html(error_message.replace("']", "").replace("['", "").replace("[]", ""));
+                }
+                else
+                    console.log('in send:pass((');
+            }
+        });
+    };
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+</script>
