@@ -1,6 +1,6 @@
 import random
 
-def rangeDamageKoeff(attacker_coords, target_coords):#   MAKE ME CORRECT!!!!!
+def rangeDamageKoeff(attacker_coords, target_coords):#MAKE ME CORRECT!!!!!
     distance = int(pointsDistance(attacker_coords, target_coords))
 #    distance = int(((attacker_coords[0] - target_coords[0]) ** 2 + (attacker_coords[1] - target_coords[1]) ** 2) ** (0.5))
 
