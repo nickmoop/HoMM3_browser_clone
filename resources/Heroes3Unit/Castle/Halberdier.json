@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "defense_skill": 5,
+  "speed": 5,
+  "attack_skill": 6,
+  "maximum_damage": 3,
+  "health": 10,
+  "name": "Halberdier",
+  "minimum_damage": 2,
+  "special": "",
+  "castle": "Castle",
+  "growth": 29
+}

@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Dungeon",
+  "name": "Minotaur_King",
+  "health": 50,
+  "attack_skill": 15,
+  "defense_skill": 15,
+  "minimum_damage": 12,
+  "maximum_damage": 20,
+  "speed": 8,
+  "growth": 6,
+  "special": "high_morale"
+}

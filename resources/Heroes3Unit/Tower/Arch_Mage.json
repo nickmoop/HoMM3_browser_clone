@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Tower",
+  "name": "Arch_Mage",
+  "health": 30,
+  "attack_skill": 12,
+  "defense_skill": 9,
+  "minimum_damage": 7,
+  "maximum_damage": 9,
+  "speed": 7,
+  "growth": 8,
+  "special": "ranged,no_melee_penalty,_41_"
+}

@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Inferno",
+  "name": "Pit_Lord",
+  "health": 45,
+  "attack_skill": 13,
+  "defense_skill": 13,
+  "minimum_damage": 13,
+  "maximum_damage": 17,
+  "speed": 7,
+  "growth": 6,
+  "special": "_21_"
+}

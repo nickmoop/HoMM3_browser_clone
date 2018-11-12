@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Inferno",
+  "name": "Familiar",
+  "health": 4,
+  "attack_skill": 4,
+  "defense_skill": 4,
+  "minimum_damage": 1,
+  "maximum_damage": 2,
+  "speed": 7,
+  "growth": 30,
+  "special": "_18_"
+}

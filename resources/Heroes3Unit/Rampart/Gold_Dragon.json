@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Rampart",
+  "name": "Gold_Dragon",
+  "health": 250,
+  "attack_skill": 27,
+  "defense_skill": 27,
+  "minimum_damage": 40,
+  "maximum_damage": 50,
+  "speed": 16,
+  "growth": 2,
+  "special": "flying,big,dragon_breath,immune_to_4_and_less_level_spells"
+}

@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Necropolis",
+  "name": "Zombie",
+  "health": 20,
+  "attack_skill": 5,
+  "defense_skill": 5,
+  "minimum_damage": 2,
+  "maximum_damage": 3,
+  "speed": 4,
+  "growth": 16,
+  "special": "undead,disease"
+}

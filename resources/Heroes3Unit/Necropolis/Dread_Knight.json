@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Necropolis",
+  "name": "Dread_Knight",
+  "health": 120,
+  "attack_skill": 18,
+  "defense_skill": 18,
+  "minimum_damage": 15,
+  "maximum_damage": 30,
+  "speed": 9,
+  "growth": 4,
+  "special": "big,curse,death_blow,undead"
+}

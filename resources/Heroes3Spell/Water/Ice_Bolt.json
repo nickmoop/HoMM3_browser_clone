@@ -1,0 +1,21 @@
+{
+  "sorting_parameter_name": "school",
+  "school": "Water",
+  "name": "Ice_Bolt",
+  "effect": {},
+  "radius": 0,
+  "formula": {
+    "general": "10+(20*spell_power)",
+    "basic": "10+(20*spell_power)",
+    "advanced": "20+(20*spell_power)",
+    "expert": "50+(20*spell_power)"
+  },
+  "level": 2,
+  "description": "Ice Bolt general description here",
+  "cost": {
+    "general": 8,
+    "basic": 6,
+    "advanced": 6,
+    "expert": 6
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Stronghold",
+  "name": "Ancient_Behemoth",
+  "health": 300,
+  "attack_skill": 19,
+  "defense_skill": 19,
+  "minimum_damage": 30,
+  "maximum_damage": 50,
+  "speed": 9,
+  "growth": 2,
+  "special": "big,ignore_defence"
+}

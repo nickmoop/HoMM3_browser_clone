@@ -1,0 +1,8 @@
+<p>INFORMATION PAGE</p>
+<form method="post">
+    {% csrf_token %}
+    {% for castle in castles %}
+        <p>MAKE ME {{ castle }} !!</p>
+    {% endfor %}
+    <p><a href="castle">CASTLE</a></p>
+</form>

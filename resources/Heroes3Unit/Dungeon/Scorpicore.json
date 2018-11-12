@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Dungeon",
+  "name": "Scorpicore",
+  "health": 80,
+  "attack_skill": 16,
+  "defense_skill": 14,
+  "minimum_damage": 14,
+  "maximum_damage": 20,
+  "speed": 11,
+  "growth": 4,
+  "special": "big,flying,paralyze"
+}

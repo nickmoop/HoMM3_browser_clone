@@ -1,0 +1,15 @@
+{
+  "sorting_parameter_name": "school",
+  "school": "Neutral",
+  "name": "Weakness",
+  "effect": {
+    "name": "wicked",
+    "type": "negative",
+    "duration": 3
+  },
+  "radius": 0,
+  "formula": "",
+  "level": 1,
+  "description": "Weakness description here",
+  "cost": 0
+}

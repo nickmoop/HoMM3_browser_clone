@@ -1,0 +1,9 @@
+<p>STATS PAGE</p>
+<form method="post">
+    {% csrf_token %}
+    {% for key, value in player_info.items %}
+        <p>{{ key }} - {{ value }}</p>
+    {% endfor %}
+    <output name="error_message" id="error_message">{{error_message}}</output>
+    <p><a href="castle">CASTLE</a></p>
+</form>

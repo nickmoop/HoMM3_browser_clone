@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "defense_skill": 3,
+  "speed": 6,
+  "attack_skill": 6,
+  "maximum_damage": 3,
+  "health": 10,
+  "name": "Marksman",
+  "minimum_damage": 2,
+  "special": "ranged,shoot_twice",
+  "castle": "Castle",
+  "growth": 19
+}

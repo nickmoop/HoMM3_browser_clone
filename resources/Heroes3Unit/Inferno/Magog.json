@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Inferno",
+  "name": "Magog",
+  "health": 13,
+  "attack_skill": 7,
+  "defense_skill": 4,
+  "minimum_damage": 2,
+  "maximum_damage": 4,
+  "speed": 6,
+  "growth": 16,
+  "special": "ranged,_19_"
+}

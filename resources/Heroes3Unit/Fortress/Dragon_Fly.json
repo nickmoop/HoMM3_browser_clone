@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Fortress",
+  "name": "Dragon_Fly",
+  "health": 20,
+  "attack_skill": 8,
+  "defense_skill": 10,
+  "minimum_damage": 2,
+  "maximum_damage": 5,
+  "speed": 13,
+  "growth": 16,
+  "special": "flying,dispels,weakness"
+}

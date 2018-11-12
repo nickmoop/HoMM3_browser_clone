@@ -1,0 +1,78 @@
+<script type="text/javascript" src="https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jqueryjs/jquery-1.3.2.js"></script>
+<p>SEARCH BATTLE PAGE</p>
+<form method="post">
+    {% csrf_token %}
+    <p><a href="castle">CASTLE</a></p>
+    <p><a href="create_battle">CREATE BATTLE</a></p>
+    <output name="error_message" id="error_message">{{error_message}}</output>
+<p>b_name &nbsp;&nbsp;&nbsp;&nbsp; cr_castl &nbsp;&nbsp;&nbsp;&nbsp; grow &nbsp;&nbsp;&nbsp;&nbsp; cr_name &nbsp;&nbsp;&nbsp;&nbsp; your_castle</p>
+    {% for battle in all_empty_battles %}
+        {{ battle.name }}
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ battle.creator_castle }}
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ battle.growth }}
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ battle.creator.nick_name }}
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input title="{{ battle.pk }}_guest_castle" type="text" name="{{ battle.pk }}_guest_castle" id="{{ battle.pk }}_guest_castle" value="test">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" onclick="connectBattle('{{ battle.pk }}');">connect to {{battle.name}}</button>
+        <p></p>
+    {% endfor %}
+</form>
+<script>
+    var connectBattle = function(battle_pk) {
+        var str = "#";
+        var res = str.concat(battle_pk);
+        var guest_castle = $(res.concat("_guest_castle")).val();
+        var data = {
+            connect_to: battle_pk,
+            guest_castle: guest_castle
+        };
+        $.ajax
+        ({
+            type     : "POST",
+            url      : "search_battle",
+            data     : data,
+            success  : function(response)
+            {
+                if(response) {
+                    var redirect_url = JSON.parse(response).redirect_url;
+                    var error_message = JSON.parse(response).error_message;
+                    console.log('in send: ' + redirect_url + ' ' + error_message);
+                    if (redirect_url)
+                            location.href = redirect_url;
+                    if (error_message)
+                            $('#error_message').html(error_message.replace("']", "").replace("['", "").replace("[]", ""));
+                }
+                else
+                    console.log('in send:pass((');
+            }
+        });
+    };
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+</script>

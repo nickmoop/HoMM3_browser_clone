@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "name": "Infernal_Troglodyte",
+  "castle": "Dungeon",
+  "attack_skill": 5,
+  "defense_skill": 4,
+  "minimum_damage": 1,
+  "maximum_damage": 3,
+  "health": 5,
+  "speed": 5,
+  "growth": 28,
+  "special": "blind_immune"
+}

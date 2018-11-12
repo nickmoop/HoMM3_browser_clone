@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Castle",
+  "name": "Archangel",
+  "health": 250,
+  "attack_skill": 30,
+  "defense_skill": 30,
+  "maximum_damage": 50,
+  "minimum_damage": 50,
+  "speed": 18,
+  "special": "big,flying,hate_archdevil,_53_",
+  "growth": 2
+}

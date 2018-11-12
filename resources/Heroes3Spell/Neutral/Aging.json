@@ -1,0 +1,15 @@
+{
+  "sorting_parameter_name": "school",
+  "school": "Neutral",
+  "name": "Aging",
+  "effect": {
+    "name": "aged",
+    "type": "negative",
+    "duration": 3
+  },
+  "radius": 0,
+  "formula": "",
+  "level": 1,
+  "description": "Aging description here",
+  "cost": 0
+}

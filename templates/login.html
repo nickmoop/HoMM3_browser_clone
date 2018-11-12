@@ -1,0 +1,68 @@
+<script type="text/javascript" src="https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jqueryjs/jquery-1.3.2.js"></script>
+<p>LOGIN PAGE</p>
+<form method="post">
+    {% csrf_token %}
+    {% for value in form %}
+        <p>{{ value.label }} :</p>
+        <p><input type="text" name="{{ value.name }}" id="{{ value.name }}"></p>
+    {% endfor %}
+    <button type="button" onclick="send();">Login</button>
+    <p><a href="registration">REGISTER</a></p>
+    <output name="error_message" id="error_message">{{error_message}}</output>
+</form>
+<script>
+    var send = function() {
+        var user_name = $("#user_name").val();
+        var password = $("#password").val();
+        var data = { user_name:user_name, password:password };
+        $.ajax
+        ({
+            type     : "POST",
+            url      : "login",
+            data     : data,
+            success  : function(response)
+            {
+            if(response) {
+                    var redirect_url = JSON.parse(response).redirect_url;
+                    var error_message = JSON.parse(response).error_message;
+                    console.log('in send: ' + redirect_url + ' ' + error_message);
+                    if (redirect_url)
+                            location.href = redirect_url;
+                        if (error_message)
+                            $('#error_message').html(error_message.replace("']", "").replace("['", "").replace("[]", ""));
+                }
+                else
+                    console.log('in send:pass((');
+            }
+        });
+    };
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+</script>

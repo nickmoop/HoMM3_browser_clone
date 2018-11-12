@@ -1,0 +1,9 @@
+<p>LEADERBOARD PAGE</p>
+<form method="post">
+    {% csrf_token %}
+&nbsp;&nbsp;&nbsp;&nbsp;RATING&nbsp;&nbsp;&nbsp;&nbsp;NAME&nbsp;&nbsp;&nbsp;&nbsp;WIN&nbsp;&nbsp;&nbsp;&nbsp;LOOSE
+    {% for player in players %}
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ player.rating }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ player.nick_name }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ player.win_count }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ player.loose_count}}</p>
+    {% endfor %}
+    <p><a href="castle">CASTLE</a></p>
+</form>

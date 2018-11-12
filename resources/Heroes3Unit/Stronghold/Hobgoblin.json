@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Stronghold",
+  "name": "Hobgoblin",
+  "health": 5,
+  "attack_skill": 5,
+  "defense_skill": 3,
+  "minimum_damage": 1,
+  "maximum_damage": 2,
+  "speed": 7,
+  "growth": 30,
+  "special": ""
+}

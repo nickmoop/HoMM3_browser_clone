@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Necropolis",
+  "name": "Ghost_Dragon",
+  "health": 200,
+  "attack_skill": 19,
+  "defense_skill": 17,
+  "minimum_damage": 25,
+  "maximum_damage": 50,
+  "speed": 14,
+  "growth": 2,
+  "special": "flying,big,undead,bad_enemy_morale,aging"
+}

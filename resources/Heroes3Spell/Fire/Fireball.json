@@ -1,0 +1,21 @@
+{
+  "sorting_parameter_name": "school",
+  "school": "Fire",
+  "name": "Fireball",
+  "effect": {},
+  "radius": 1,
+  "formula": {
+    "general": "15+(10*spell_power)",
+    "basic": "15+(10*spell_power)",
+    "advanced": "30+(10*spell_power)",
+    "expert": "60+(10*spell_power)"
+  },
+  "level": 3,
+  "description": "Fireball description here",
+  "cost": {
+    "general": 15,
+    "basic": 12,
+    "advanced": 12,
+    "expert": 12
+  }
+}

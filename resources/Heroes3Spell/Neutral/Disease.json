@@ -1,0 +1,15 @@
+{
+  "sorting_parameter_name": "school",
+  "school": "Neutral",
+  "name": "Disease",
+  "effect": {
+    "name": "diseased",
+    "type": "negative",
+    "duration": 3
+  },
+  "radius": 0,
+  "formula": "",
+  "level": 1,
+  "description": "Disease description here",
+  "cost": 0
+}

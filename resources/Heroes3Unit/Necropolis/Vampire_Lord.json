@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Necropolis",
+  "name": "Vampire_Lord",
+  "health": 40,
+  "attack_skill": 10,
+  "defense_skill": 10,
+  "minimum_damage": 5,
+  "maximum_damage": 8,
+  "speed": 9,
+  "growth": 8,
+  "special": "flying,no_enemy_retaliation,undead,life_drain"
+}

@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Castle",
+  "name": "Champion",
+  "health": 100,
+  "attack_skill": 16,
+  "defense_skill": 16,
+  "maximum_damage": 25,
+  "minimum_damage": 20,
+  "speed": 9,
+  "special": "big,jousting",
+  "growth": 4
+}

@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Castle",
+  "name": "Crusader",
+  "health": 35,
+  "attack_skill": 12,
+  "defense_skill": 12,
+  "maximum_damage": 10,
+  "minimum_damage": 7,
+  "speed": 6,
+  "special": "hit_twice",
+  "growth": 8
+}

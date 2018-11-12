@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Tower",
+  "name": "Master_Genie",
+  "health": 40,
+  "attack_skill": 12,
+  "defense_skill": 12,
+  "minimum_damage": 13,
+  "maximum_damage": 16,
+  "speed": 11,
+  "growth": 6,
+  "special": "flying,hate_efreet_sultan,_43_"
+}

@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Fortress",
+  "name": "Mighty_Gorgon",
+  "health": 70,
+  "attack_skill": 11,
+  "defense_skill": 16,
+  "minimum_damage": 12,
+  "maximum_damage": 16,
+  "speed": 6,
+  "growth": 6,
+  "special": "big,death_stare"
+}

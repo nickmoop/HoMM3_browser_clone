@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Necropolis",
+  "name": "Power_Lich",
+  "health": 40,
+  "attack_skill": 13,
+  "defense_skill": 10,
+  "minimum_damage": 11,
+  "maximum_damage": 15,
+  "speed": 7,
+  "growth": 6,
+  "special": "ranged,undead,_31_"
+}

@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Stronghold",
+  "name": "Thunderbird",
+  "health": 60,
+  "attack_skill": 13,
+  "defense_skill": 11,
+  "minimum_damage": 11,
+  "maximum_damage": 15,
+  "speed": 11,
+  "growth": 6,
+  "special": "flying,big,lightning_strike"
+}

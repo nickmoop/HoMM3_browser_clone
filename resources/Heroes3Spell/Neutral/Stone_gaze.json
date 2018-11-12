@@ -1,0 +1,15 @@
+{
+  "sorting_parameter_name": "school",
+  "school": "Neutral",
+  "name": "Stone_gaze",
+  "effect": {
+    "name": "stoned",
+    "type": "negative",
+    "duration": 3
+  },
+  "radius": 0,
+  "formula": "",
+  "level": 1,
+  "description": "Stone gaze description here",
+  "cost": 0
+}

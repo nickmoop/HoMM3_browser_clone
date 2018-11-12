@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Dungeon",
+  "name": "Medusa_Queen",
+  "health": 30,
+  "attack_skill": 10,
+  "defense_skill": 10,
+  "minimum_damage": 6,
+  "maximum_damage": 8,
+  "speed": 6,
+  "growth": 8,
+  "special": "big,ranged,no_melee_penalty,stone_gaze"
+}

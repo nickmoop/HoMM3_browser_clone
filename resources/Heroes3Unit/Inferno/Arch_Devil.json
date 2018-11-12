@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Inferno",
+  "name": "Arch_Devil",
+  "health": 200,
+  "attack_skill": 26,
+  "defense_skill": 28,
+  "minimum_damage": 30,
+  "maximum_damage": 40,
+  "speed": 17,
+  "growth": 2,
+  "special": "flying,no_enemy_retaliation,hate_archangel,bad_enemy_luck"
+}

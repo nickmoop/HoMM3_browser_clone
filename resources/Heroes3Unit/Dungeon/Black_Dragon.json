@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "name": "Black_Dragon",
+  "castle": "Dungeon",
+  "attack_skill": 25,
+  "defense_skill": 25,
+  "minimum_damage": 40,
+  "maximum_damage": 50,
+  "health": 300,
+  "speed": 15,
+  "growth": 2,
+  "special": "big,flying,dragon_breath,hate_titan,immune_to_five_and_less_level_spells"
+}

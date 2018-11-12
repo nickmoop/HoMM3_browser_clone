@@ -1,0 +1,11 @@
+{
+  "sorting_parameter_name": "school",
+  "school": "Fire",
+  "name": "Fire_Shield",
+  "effect": {},
+  "radius": 0,
+  "formula": "0.5*damage",
+  "level": 1,
+  "description": "Fire shield description here",
+  "cost": 0
+}

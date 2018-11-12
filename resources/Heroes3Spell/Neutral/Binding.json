@@ -1,0 +1,15 @@
+{
+  "sorting_parameter_name": "school",
+  "school": "Neutral",
+  "name": "Binding",
+  "effect": {
+    "name": "bounded",
+    "type": "negative",
+    "duration": 100
+  },
+  "radius": 0,
+  "formula": "",
+  "level": 1,
+  "description": "Binding description here",
+  "cost": 0
+}

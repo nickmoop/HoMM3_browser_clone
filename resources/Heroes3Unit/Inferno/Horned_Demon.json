@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Inferno",
+  "name": "Horned_Demon",
+  "health": 40,
+  "attack_skill": 10,
+  "defense_skill": 10,
+  "minimum_damage": 7,
+  "maximum_damage": 9,
+  "speed": 6,
+  "growth": 8,
+  "special": ""
+}

@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Fortress",
+  "name": "Gnoll_Maradeur",
+  "health": 6,
+  "attack_skill": 3,
+  "defense_skill": 4,
+  "minimum_damage": 2,
+  "maximum_damage": 3,
+  "speed": 5,
+  "growth": 24,
+  "special": ""
+}

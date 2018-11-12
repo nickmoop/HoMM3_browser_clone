@@ -1,0 +1,42 @@
+{
+  "sorting_parameter_name": "school",
+  "school": "Earth",
+  "name": "Slow",
+  "effect": {
+    "general": {
+      "name": "slow_basic",
+      "type": "negative",
+      "duration": 1
+    },
+    "basic": {
+      "name": "slow_basic",
+      "type": "negative",
+      "duration": 1
+    },
+    "advanced": {
+      "name": "slow_advanced",
+      "type": "negative",
+      "duration": 1
+    },
+    "expert": {
+      "name": "slow_advanced",
+      "type": "negative",
+      "duration": 1
+    }
+  },
+  "radius": {
+    "general": 0,
+    "basic": 0,
+    "advanced": 0,
+    "expert": 100
+  },
+  "formula": "effect['duration']*spell_power",
+  "level": 1,
+  "description": "Slow description here",
+  "cost": {
+    "general": 6,
+    "basic": 5,
+    "advanced": 5,
+    "expert": 5
+  }
+}

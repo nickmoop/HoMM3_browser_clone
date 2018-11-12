@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Fortress",
+  "name": "Wyvern_Monarch",
+  "health": 70,
+  "attack_skill": 14,
+  "defense_skill": 14,
+  "minimum_damage": 18,
+  "maximum_damage": 22,
+  "speed": 11,
+  "growth": 4,
+  "special": "flying,big,poisonous"
+}

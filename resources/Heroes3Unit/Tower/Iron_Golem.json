@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Tower",
+  "name": "Iron_Golem",
+  "health": 35,
+  "attack_skill": 9,
+  "defense_skill": 10,
+  "minimum_damage": 4,
+  "maximum_damage": 5,
+  "speed": 5,
+  "growth": 12,
+  "special": "only_take_40_percent_of_spell_damage"
+}

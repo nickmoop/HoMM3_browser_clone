@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Rampart",
+  "name": "Battle_Dwarf",
+  "health": 20,
+  "attack_skill": 7,
+  "defense_skill": 7,
+  "minimum_damage": 2,
+  "maximum_damage": 4,
+  "speed": 5,
+  "growth": 16,
+  "special": "_45_"
+}

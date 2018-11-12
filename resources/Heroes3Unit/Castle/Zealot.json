@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Castle",
+  "name": "Zealot",
+  "health": 10,
+  "attack_skill": 12,
+  "defense_skill": 10,
+  "minimum_damage": 10,
+  "maximum_damage": 12,
+  "speed": 7,
+  "growth": 6,
+  "special": "ranged,no_melee_penalty"
+}

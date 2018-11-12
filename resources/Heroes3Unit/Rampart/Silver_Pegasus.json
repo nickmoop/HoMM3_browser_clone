@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Rampart",
+  "name": "Silver_Pegasus",
+  "health": 30,
+  "attack_skill": 9,
+  "defense_skill": 10,
+  "minimum_damage": 5,
+  "maximum_damage": 9,
+  "speed": 12,
+  "growth": 10,
+  "special": "flying,big,magic_damper"
+}

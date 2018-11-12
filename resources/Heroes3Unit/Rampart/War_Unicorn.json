@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Rampart",
+  "name": "War_Unicorn",
+  "health": 110,
+  "attack_skill": 15,
+  "defense_skill": 14,
+  "minimum_damage": 18,
+  "maximum_damage": 22,
+  "speed": 9,
+  "growth": 4,
+  "special": "big,blind,magic_resistance_aura"
+}

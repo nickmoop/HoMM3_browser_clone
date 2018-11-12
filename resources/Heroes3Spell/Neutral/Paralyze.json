@@ -1,0 +1,15 @@
+{
+  "sorting_parameter_name": "school",
+  "school": "Neutral",
+  "name": "Paralyze",
+  "effect": {
+    "name": "paralyzed",
+    "type": "negative",
+    "duration": 3
+  },
+  "radius": 0,
+  "formula": "",
+  "level": 1,
+  "description": "Paralyze description here",
+  "cost": 0
+}

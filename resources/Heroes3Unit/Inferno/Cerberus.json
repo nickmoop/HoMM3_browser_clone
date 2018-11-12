@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Inferno",
+  "name": "Cerberus",
+  "health": 25,
+  "attack_skill": 10,
+  "defense_skill": 8,
+  "minimum_damage": 2,
+  "maximum_damage": 7,
+  "speed": 8,
+  "growth": 10,
+  "special": "big,no_enemy_retaliation,attack_units_in_front"
+}

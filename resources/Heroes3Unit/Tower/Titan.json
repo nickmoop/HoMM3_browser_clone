@@ -1,0 +1,13 @@
+{
+  "sorting_parameter_name": "castle",
+  "castle": "Tower",
+  "name": "Titan",
+  "health": 300,
+  "attack_skill": 24,
+  "defense_skill": 24,
+  "minimum_damage": 40,
+  "maximum_damage": 60,
+  "speed": 11,
+  "growth": 2,
+  "special": "ranged,no_melee_penalty,hate_black_dragon"
+}

@@ -1,0 +1,11 @@
+{
+  "sorting_parameter_name": "school",
+  "school": "Neutral",
+  "name": "Lightning_Strike",
+  "effect": {},
+  "radius": 0,
+  "formula": "10*attacker.stack",
+  "level": 1,
+  "description": "Thunder description here",
+  "cost": 0
+}
