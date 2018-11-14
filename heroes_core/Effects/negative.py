@@ -77,6 +77,20 @@ def paralyzed(unit):
     return {SPEED_MULT: 0}
 
 
+def blinded(unit):
+    """
+    blinded effect dispelling after attack
+
+    :param unit: unit to take effect
+    :return: unit stats modifiers
+    :type unit: BattleUnit
+    :rtype: dict
+    """
+    unit.dispel_effect('blinded')
+
+    return {SPEED_MULT: 0}
+
+
 def aged(unit):
     """
     -50% maximum health

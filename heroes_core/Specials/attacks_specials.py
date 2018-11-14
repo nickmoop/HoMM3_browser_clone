@@ -2,13 +2,14 @@
 Specials attack methods, like additional damage to some kind of units,
 ranged attacks calculation, etc.
 Each method take 2 arguments - attacker unit, defender unit
-    returns dict with modifiers to attacker unit or change defender attributes
+    returns dict with modifiers and log message to attacker unit,
+    or change defender attributes
 """
 
 import random
 
 from heroes_core.helper_methods import range_damage, cells_distance
-from heroes_core.TMP_some_constants import DAMAGE_MULT
+from heroes_core.TMP_some_constants import DAMAGE_MULT, LOG_MESSAGE
 
 
 def death_stare(attacker, defender):
@@ -19,7 +20,7 @@ def death_stare(attacker, defender):
 
     :param attacker: attacker unit
     :param defender: defender unit
-    :return: empty dict
+    :return: empty dict if cast not procs, log message in dict if cast procs
     :type attacker: BattleUnit
     :type defender: BattleUnit
     :rtype: dict
@@ -27,6 +28,11 @@ def death_stare(attacker, defender):
     chance = int(attacker.stack / 10) * 10
     if random.randint(0, 100) <= chance:
         defender.stack -= 1
+        return {
+            LOG_MESSAGE: 'After {} death stare, {} one unit dead\n'.format(
+                attacker.name, defender.name
+            )
+        }
 
     return {}
 
@@ -38,7 +44,7 @@ def ranged(attacker, defender):
 
     :param attacker: attacker unit
     :param defender: defender unit
-    :return: ranged attack modifiers
+    :return: ranged attack modifiers and log message in dict
     :type attacker: BattleUnit
     :type defender: BattleUnit
     :rtype: dict
@@ -48,14 +54,26 @@ def ranged(attacker, defender):
 
     # range attack to defender
     if range_damage_koeff:
-        return {DAMAGE_MULT: range_damage_koeff}
+        return {
+            DAMAGE_MULT: range_damage_koeff,
+            LOG_MESSAGE: '{} shoot {}. {} damage coefficient\n'.format(
+                attacker.name, defender.name, range_damage_koeff)
+        }
     # melee attack to defender
     else:
         # no penalty for melee
         if 'no_melee_penalty' in attacker.special:
-            return {DAMAGE_MULT: 1}
+            return {
+                DAMAGE_MULT: 1,
+                LOG_MESSAGE: '{} hit {} without melee penalty\n'.format(
+                    attacker.name, defender.name)
+            }
         # penalty for melee
-        return {DAMAGE_MULT: 0.5}
+        return {
+            DAMAGE_MULT: 0.5,
+            LOG_MESSAGE: '{} hit {} with melee penalty\n'.format(
+                attacker.name, defender.name)
+        }
 
 
 def hate_titan(attacker, defender):
@@ -72,7 +90,11 @@ def hate_titan(attacker, defender):
     """
 
     if 'Titan' in defender.name:
-        return {DAMAGE_MULT: 1.5}
+        return {
+            DAMAGE_MULT: 1.5,
+            LOG_MESSAGE: '{} hate {}. Do 150% damage\n'.format(
+                attacker.name, defender.name)
+        }
 
     return {DAMAGE_MULT: 1}
 
@@ -90,7 +112,11 @@ def hate_master_genie(attacker, defender):
     :rtype: dict
     """
     if 'Master_Genie' in defender.name:
-        return {DAMAGE_MULT: 1.5}
+        return {
+            DAMAGE_MULT: 1.5,
+            LOG_MESSAGE: '{} hate {}. Do 150% damage\n'.format(
+                attacker.name, defender.name)
+        }
 
     return {DAMAGE_MULT: 1}
 
@@ -108,7 +134,11 @@ def hate_archangel(attacker, defender):
     :rtype: dict
     """
     if 'Archangel' in defender.name:
-        return {DAMAGE_MULT: 1.5}
+        return {
+            DAMAGE_MULT: 1.5,
+            LOG_MESSAGE: '{} hate {}. Do 150% damage\n'.format(
+                attacker.name, defender.name)
+        }
 
     return {DAMAGE_MULT: 1}
 
@@ -126,7 +156,11 @@ def hate_efreet_sultan(attacker, defender):
     :rtype: dict
     """
     if 'Efreet_Sultan' in defender.name:
-        return {DAMAGE_MULT: 1.5}
+        return {
+            DAMAGE_MULT: 1.5,
+            LOG_MESSAGE: '{} hate {}. Do 150% damage\n'.format(
+                attacker.name, defender.name)
+        }
 
     return {DAMAGE_MULT: 1}
 
@@ -144,7 +178,11 @@ def hate_black_dragon(attacker, defender):
     :rtype: dict
     """
     if 'Black_Dragon' in defender.name:
-        return {DAMAGE_MULT: 1.5}
+        return {
+            DAMAGE_MULT: 1.5,
+            LOG_MESSAGE: '{} hate {}. Do 150% damage\n'.format(
+                attacker.name, defender.name)
+        }
 
     return {DAMAGE_MULT: 1}
 
@@ -162,7 +200,11 @@ def hate_archdevil(attacker, defender):
     :rtype: dict
     """
     if 'Arch_Devil' in defender.name:
-        return {DAMAGE_MULT: 1.5}
+        return {
+            DAMAGE_MULT: 1.5,
+            LOG_MESSAGE: '{} hate {}. Do 150% damage\n'.format(
+                attacker.name, defender.name)
+        }
 
     return {DAMAGE_MULT: 1}
 
@@ -181,7 +223,11 @@ def death_blow(attacker, defender):
     :rtype: dict
     """
     if random.randint(0, 100) <= 20:
-        return {DAMAGE_MULT: 2}
+        return {
+            DAMAGE_MULT: 2,
+            LOG_MESSAGE: '{} make death blow to {}. Do x2 damage\n'.format(
+                attacker.name, defender.name)
+        }
 
     return {DAMAGE_MULT: 1}
 
@@ -203,4 +249,8 @@ def jousting(attacker, defender):
     if distance < 0:
         distance = 0
 
-    return {DAMAGE_MULT: 1 + distance * 0.05}
+    return {
+        DAMAGE_MULT: 1 + distance * 0.05,
+        LOG_MESSAGE: '{} jousting {} for {} hexes distance\n'.format(
+            attacker.name, defender.name, distance)
+    }

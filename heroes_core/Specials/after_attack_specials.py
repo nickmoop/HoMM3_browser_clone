@@ -2,11 +2,12 @@
 Special methods happens after some unit attack other unit
 Each method take 2 arguments - damage taken by unit,
     target unit to take effect of special
-    returns empty dict (to be same as other specials),
+    returns dict with log message,
     and change target unit attributes
 """
 
 from heroes_core.Spell import ALL_SPELLS
+from heroes_core.TMP_some_constants import LOG_MESSAGE
 
 
 def life_drain(damage, target_unit):
@@ -17,14 +18,13 @@ def life_drain(damage, target_unit):
 
     :param damage: amount of damage which make target_unit to some unit
     :param target_unit: unit which make damage, unit to restore
-    :return: empty dict
+    :return: log message dict
     :type damage: int
     :type target_unit: BattleUnit
     :rtype: dict
     """
-    target_unit.take_restoration(damage)
 
-    return {}
+    return {LOG_MESSAGE: target_unit.take_restoration(damage)}
 
 
 def fire_shield(damage, target_unit):
@@ -35,13 +35,12 @@ def fire_shield(damage, target_unit):
 
     :param damage: amount of damage which make target_unit to some unit
     :param target_unit: unit which make damage, unit to take half damage back
-    :return: empty dict
+    :return: log message dict
     :type damage: int
     :type target_unit: BattleUnit
     :rtype: dict
     """
     spell = ALL_SPELLS['Fire_Fire_Shield']
     spell.damage = eval(spell.formula)
-    target_unit.take_spell(spell)
 
-    return {}
+    return {LOG_MESSAGE: target_unit.take_spell(spell)}

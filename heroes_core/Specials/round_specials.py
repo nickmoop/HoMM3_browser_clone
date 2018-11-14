@@ -1,10 +1,12 @@
 """
 Special methods casts every round starts
 Each method take 1 argument - unit which have special skill,
-    returns modifiers, or change unit attributes
+    returns modifiers with log message dict, or change unit attributes
 """
 
-from heroes_core.TMP_some_constants import GUEST_MP_ADD, CREATOR_MP_ADD, GUEST
+from heroes_core.TMP_some_constants import (
+    GUEST_MP_ADD, CREATOR_MP_ADD, GUEST, LOG_MESSAGE
+)
 
 
 def unlimited_retaliations(unit):
@@ -32,8 +34,7 @@ def regeneration(unit):
     :type unit: BattleUnit
     :rtype: dict
     """
-    unit.take_heal(1000)
-    return {}
+    return {LOG_MESSAGE: unit.take_heal(1000)}
 
 
 def drain_mana(unit):
@@ -50,5 +51,7 @@ def drain_mana(unit):
         mana_modifiers = {GUEST_MP_ADD: 2, CREATOR_MP_ADD: -2}
     else:
         mana_modifiers = {GUEST_MP_ADD: -2, CREATOR_MP_ADD: 2}
+
+    mana_modifiers[LOG_MESSAGE] = '{} drain mana\n'.format(unit.name)
 
     return mana_modifiers

@@ -13,7 +13,7 @@ from heroes_core.helper_methods import (
 from heroes_core.TMP_some_constants import (
     DAMAGE, DEFENCE_ADD, ATTACK_ADD, DEFENCE_MULT, TARGETS_ADD, HEALTH_MULT,
     DAMAGE_MULT, SPEED_MULT, SPEED_ADD, BATTLE_START_CELLS, GUEST, CREATOR,
-    RESOURCES, SORTING_PARAMETER, UNIT
+    RESOURCES, SORTING_PARAMETER, UNIT, LOG_MESSAGE
 )
 
 
@@ -117,11 +117,10 @@ class BattleUnit(object):
         self.absolute_coordinates = coordinates_to_abs(coords, 60, 100)
 
     def attack(self, target_unit, units, counter_attack=False):
-
-        log_message = ''
+        log_message = str()
         target_list = self.make_targets_list(target_unit, units)
         for target in target_list:
-            log_message = self.attack_calculations(target, units)
+            log_message += self.attack_calculations(target, units)
 
         # attacker cancel retaliation
         if 'no_enemy_retaliation' in self.special:
@@ -141,11 +140,12 @@ class BattleUnit(object):
         if counter_attack:
             return log_message
 
+        # target unit make counter attack
         target_unit.retaliation -= 1
-        retaliation_log_message = target_unit.attack(
+        log_message += target_unit.attack(
             self, units, counter_attack=True)
 
-        return log_message + retaliation_log_message
+        return log_message
 
     def make_targets_list(self, target, units):
         targets_list = [target]
@@ -162,38 +162,57 @@ class BattleUnit(object):
 
     def attack_calculations(self, target_unit, units):
         damage = self.physical_damage_to_target(target_unit)
+        full_attack_log = str()
 
-        # SPECIALS BLOCK!!!
+        # specials physical damage
+        special_physical_log = str()
         for method in self.attack_specials:
-            method(self, target_unit)
+            special_physical_log += method(
+                self, target_unit).get(LOG_MESSAGE, '')
 
-        # after attack casts
+        full_attack_log += special_physical_log
+
+        # attack casts
+        attack_casts_log = str()
         for method in self.attack_casts:
-            method(self, target_unit)
+            attack_casts_log += method(self, target_unit).get(LOG_MESSAGE, '')
+
+        full_attack_log += attack_casts_log
 
         # x0.5, x1, x2 damage depends on luck
-        damage = int(self.TMP_lucky(units) * damage)
-        target_unit.take_damage(damage)
+        TMP_self_luck = self.TMP_lucky(units)
+        luck_state = str()
+        if TMP_self_luck == 0.5:
+            luck_state = ' unlucky'
+        elif TMP_self_luck == 2:
+            luck_state = ' lucky'
 
+        damage = int(TMP_self_luck * damage)
+        damage_log = '{}{}, make {} damage\n'.format(
+            self.name, luck_state, damage)
+        damage_log += target_unit.take_damage(damage)
+
+        full_attack_log += damage_log
+
+        after_attack_log = str()
         # attacker after attack specials
         for method in self.after_attack_specials:
-            method(damage, self)
+            after_attack_log += method(damage, self).get(LOG_MESSAGE, '')
 
         # defender after attack specials
         for method in target_unit.after_attack_specials:
-            method(damage, self)
+            after_attack_log += method(damage, self).get(LOG_MESSAGE, '')
 
+        full_attack_log += after_attack_log
+
+        # check target unit dead
         if target_unit.stack == 0 and target_unit.health_left == 0:
             target_unit_key = '{}_{}'.format(
                 target_unit.name, target_unit.role)
             if target_unit_key in units.keys():
                 del units[target_unit_key]
 
-
-        basic_attack_message = '{} hit {} for {} damage\n'.format(
-            self.name, target_unit.name, damage)
-
-        return basic_attack_message
+        return full_attack_log
 
     def physical_damage_to_target(self, target_unit):
         damage = random.randint(self.minimum_damage, self.maximum_damage)
@@ -472,7 +491,7 @@ class BattleUnit(object):
             self.stack = 0
             self._health_left = 0
 
-            return
+            return '{} dead now\n'.format(self.name)
 
         full_stack_left = int(total_health_left / self.health)
         health_left = int(total_health_left - full_stack_left * self.health)
@@ -480,8 +499,13 @@ class BattleUnit(object):
         if health_left > 0:
             full_stack_left += 1
 
+        log_message = '{} take {} damage, {} units lost\n'.format(
+            self.name, damage, self.stack - full_stack_left)
+
         self.stack = full_stack_left
         self._health_left = health_left
+
+        return log_message
 
     def take_restoration(self, heal_amount):
         total_health = self.health_total
@@ -496,40 +520,60 @@ class BattleUnit(object):
         if unit_health_left > self.health:
             unit_health_left = self.health
 
+        log_message = '{} restore {} health, {} units resurrected\n'.format(
+            self.name, heal_amount, healed_unit_stack-self.stack)
+
         self.stack = healed_unit_stack
         self._health_left = unit_health_left
+
+        return log_message
 
     def take_heal(self, heal_amount):
         new_health_left = self.health_left + heal_amount
         if new_health_left > self.health:
             new_health_left = self.health
 
+        log_message = '{} take {} heal points\n'.format(
+            self.name, new_health_left - self._health_left)
         self._health_left = new_health_left
+
+        return log_message
 
     def take_spell(self, spell):
         damage_multiplier = 1
+        log_message = str()
         for method in self.spells_specials:
-            damage_multiplier *= method(spell).get(DAMAGE_MULT, 0)
+            modifiers = method(spell)
+            damage_multiplier *= modifiers.get(DAMAGE_MULT, 1)
+            spell_log_message = modifiers.get(LOG_MESSAGE, None)
+            if spell_log_message:
+                log_message += '{} {}\n'.format(self.name, spell_log_message)
 
         # spell does not effect or damage unit
         if damage_multiplier == 0:
-            return
+            return log_message
 
         # unit resist spell
         if random.randint(1, 100) <= int(self.resistance):
-            return
+            return '{} resists {}\n'.format(self.name, spell.name)
 
+        # unit take spell effect
         if spell.effect:
-            self.take_effect(spell.effect)
+            log_message = self.take_effect(spell.effect)
 
+        # unit take spell damage
         if getattr(spell, 'damage', 0):
-            self.take_damage(spell.damage)
+            log_message += self.take_damage(spell.damage * damage_multiplier)
+
+        return log_message
 
     def take_effect(self, effect):
         self.effects[effect['name']] = {
             'type': effect['type'],
             'duration': effect['duration']
         }
+
+        return '{} take {}\n'.format(self.name, effect['name'])
 
     @property
     def health_total(self):
