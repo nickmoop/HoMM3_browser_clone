@@ -238,14 +238,15 @@ class UserBattle(TemplateView):
 
         if new_cell in shaded_cells and shaded_cells[new_cell] != 'red':
             unit_to_move.move(new_cell, units)
+            unit_to_move.make_turn()
             battle.update_units(units)
         else:
             new_cell, target_unit = unit_to_move.maybe_attack_other_unit(
                 new_cell, vector, units, shaded_cells)
 
             if new_cell and target_unit:
-                unit_to_move.move(new_cell, units)
-                attack_log_message = unit_to_move.attack(target_unit, units)
+                attack_log_message = unit_to_move.attack(
+                    target_unit, units, attack_cell=new_cell)
                 battle.log += attack_log_message
                 battle.update_units(units)
 

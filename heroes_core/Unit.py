@@ -6,6 +6,7 @@ from heroes_core.Specials import (
     after_attack_specials, attacks_casts, attacks_specials, physical_damage,
     round_specials, spells_specials, targets_specials
 )
+from heroes_core.Specials import attacks_ranged
 from heroes_core.helper_methods import (
     coordinates_to_abs, get_attacker_cell, range_damage, get_special_methods,
     get_nearby_cells
@@ -13,7 +14,7 @@ from heroes_core.helper_methods import (
 from heroes_core.TMP_some_constants import (
     DAMAGE, DEFENCE_ADD, ATTACK_ADD, DEFENCE_MULT, TARGETS_ADD, HEALTH_MULT,
     DAMAGE_MULT, SPEED_MULT, SPEED_ADD, BATTLE_START_CELLS, GUEST, CREATOR,
-    RESOURCES, SORTING_PARAMETER, UNIT, LOG_MESSAGE
+    RESOURCES, SORTING_PARAMETER, UNIT, LOG_MESSAGE, MOVE_UNIT
 )
 
 
@@ -107,43 +108,49 @@ class BattleUnit(object):
                         new_coordinates[1] = (
                             new_coordinates[1][0] - 1, new_coordinates[1][1])
 
-        if self.turn == 3:
-            self.turn = 2
-        elif self.turn == 2:
-            self.turn = 0
-
         coords = sorted(new_coordinates)[0]
         self.cell_coordinates = new_coordinates[0]
         self.absolute_coordinates = coordinates_to_abs(coords, 60, 100)
 
-    def attack(self, target_unit, units, counter_attack=False):
-        log_message = str()
+    def attack(
+            self, target_unit, units, attack_cell=None, counter_attack=False
+    ):
+        # save attacker coordinates before move
+        old_coordinates = self.coordinates[0]
+        # make list of targets to attack
         target_list = self.make_targets_list(target_unit, units)
+        log_message = str()
+        # attack each target in list
         for target in target_list:
-            log_message += self.attack_calculations(target, units)
+            log_message += self.attack_calculations(target, units, attack_cell)
 
+        # decrease unit turns left (in this round)
+        self.make_turn()
+
+        # is it ranged attack or ranged unit hit in melee radius
+        range_damage_coefficient = 0
+        if 'ranged' in self.special:
+            range_damage_coefficient = range_damage(
+                self.cell_coordinates, target_unit.cell_coordinates)
+
+        # target unit DO NOT MAKE counter attack if
+        # this attack is counter attack or
+        # target cant counter attack or
+        # this attack is ranged attack or
         # attacker cancel retaliation
-        if 'no_enemy_retaliation' in self.special:
-            return log_message
+        if not (
+            counter_attack or
+            target_unit.retaliation == 0 or
+            range_damage_coefficient or
+            'no_enemy_retaliation' in self.special
+        ):
+            target_unit.retaliation -= 1
+            log_message += target_unit.attack(
+                self, units, counter_attack=True)
 
-        # target cant counter attack
-        if target_unit.retaliation == 0:
-            return log_message
-
-        # ranged attack
-        range_damage_koeff = range_damage(
-            self.cell_coordinates, target_unit.cell_coordinates)
-        if 'ranged' in self.special and range_damage_koeff:
-            return log_message
-
-        # this attack is counter attack
-        if counter_attack:
-            return log_message
-
-        # target unit make counter attack
-        target_unit.retaliation -= 1
-        log_message += target_unit.attack(
-            self, units, counter_attack=True)
+        # go back after attack (like Harpy Hag)
+        if 'strike_and_return' in self.special:
+            return self.move(old_coordinates, units)
 
         return log_message
 
@@ -160,26 +167,51 @@ class BattleUnit(object):
 
         return targets_list
 
-    def attack_calculations(self, target_unit, units):
-        damage = self.physical_damage_to_target(target_unit)
-        full_attack_log = str()
+    def attack_calculations(self, target_unit, units, attack_cell):
+        # calculate base damage and init log
+        damage, full_attack_log = self.physical_damage_to_target(target_unit)
 
-        # specials physical damage
+        # specials physical damage and log
         special_physical_log = str()
+        damage_mult = 1
         for method in self.attack_specials:
-            special_physical_log += method(
-                self, target_unit).get(LOG_MESSAGE, '')
+            method_results_dict = method(self, target_unit)
+            special_physical_log += method_results_dict.get(LOG_MESSAGE, '')
+
+            method_damage_mult = method_results_dict.get(DAMAGE_MULT, None)
+            if method_damage_mult:
+                damage_mult *= method_damage_mult
 
         full_attack_log += special_physical_log
 
-        # attack casts
+        # ranged attack and log
+        ranged_log = str()
+        move_unit_flag = True
+        for method in self.attack_ranged:
+            method_results_dict = method(self, target_unit, units)
+            ranged_log += method_results_dict.get(LOG_MESSAGE, '')
+
+            method_damage_mult = method_results_dict.get(DAMAGE_MULT, None)
+            if method_damage_mult:
+                damage_mult *= method_damage_mult
+
+            if not method_results_dict.get(MOVE_UNIT, True):
+                move_unit_flag = False
+
+        full_attack_log += ranged_log
+
+        # move unit to attack cell after basic damage calculations
+        if move_unit_flag and attack_cell:
+            self.move(attack_cell, units)
+
+        # attack casts and log
         attack_casts_log = str()
         for method in self.attack_casts:
             attack_casts_log += method(self, target_unit).get(LOG_MESSAGE, '')
 
         full_attack_log += attack_casts_log
 
-        # x0.5, x1, x2 damage depends on luck
+        # x0.5, x1, x2 damage depends on luck and log
         TMP_self_luck = self.TMP_lucky(units)
         luck_state = str()
         if TMP_self_luck == 0.5:
@@ -187,15 +219,16 @@ class BattleUnit(object):
         elif TMP_self_luck == 2:
             luck_state = ' lucky'
 
-        damage = int(TMP_self_luck * damage)
+        # finalize damage value and log
+        damage = int(TMP_self_luck * damage * damage_mult)
         damage_log = '{}{}, make {} damage\n'.format(
             self.name, luck_state, damage)
         damage_log += target_unit.take_damage(damage)
 
         full_attack_log += damage_log
 
-        after_attack_log = str()
         # attacker after attack specials
+        after_attack_log = str()
         for method in self.after_attack_specials:
             after_attack_log += method(damage, self).get(LOG_MESSAGE, '')
 
@@ -203,6 +236,7 @@ class BattleUnit(object):
         for method in target_unit.after_attack_specials:
             after_attack_log += method(damage, self).get(LOG_MESSAGE, '')
 
+        # after attack log
         full_attack_log += after_attack_log
 
         # check target unit dead
@@ -214,28 +248,45 @@ class BattleUnit(object):
 
         return full_attack_log
 
+    def make_turn(self):
+        if self.turn == 3:
+            self.turn = 2
+        elif self.turn == 2:
+            self.turn = 0
+
     def physical_damage_to_target(self, target_unit):
         damage = random.randint(self.minimum_damage, self.maximum_damage)
         attack_add = 0
         target_defence_add = 0
         target_defence_mult = 1
+        damage_mult = 1
 
+        physical_damage_log = str()
         for method in self.special_physical_damage:
-            tmp_target_defence_mult = method(target_unit).get(DEFENCE_MULT, 0)
+            method_modifiers = method(self, target_unit)
+            physical_damage_log += method_modifiers.get(LOG_MESSAGE, '')
+
+            tmp_target_defence_mult = method_modifiers.get(DEFENCE_MULT, None)
             if tmp_target_defence_mult:
                 target_defence_mult *= tmp_target_defence_mult
 
+            tmp_damage_mult = method_modifiers.get(DAMAGE_MULT, None)
+            if tmp_damage_mult:
+                damage_mult *= tmp_damage_mult
+
         for method in self.negative_effects:
             modifiers = method(self)
-            tmp_attack_add = modifiers.get(ATTACK_ADD, 0)
-            tmp_damage = modifiers.get(DAMAGE, 0)
+
+            tmp_attack_add = modifiers.get(ATTACK_ADD, None)
             if tmp_attack_add:
                 attack_add += tmp_attack_add
+
+            tmp_damage = modifiers.get(DAMAGE, None)
             if tmp_damage:
                 damage = tmp_damage
 
         for method in target_unit.negative_effects:
-            tmp_target_defence_add = method(target_unit).get(DEFENCE_ADD, 0)
+            tmp_target_defence_add = method(target_unit).get(DEFENCE_ADD, None)
             if tmp_target_defence_add:
                 target_defence_add += tmp_target_defence_add
 
@@ -244,19 +295,20 @@ class BattleUnit(object):
         target_defence_skill *= target_defence_mult
         delta_skill = attacker_attack_skill - target_defence_skill
         if delta_skill > 0:
-            damage_koefficient = 1 + delta_skill * 0.05
-            if damage_koefficient > 4:
-                damage_koefficient = 4
+            damage_coefficient = 1 + delta_skill * 0.05
+            if damage_coefficient > 4:
+                damage_coefficient = 4
         elif delta_skill < 0:
-            damage_koefficient = 1 - delta_skill * 0.02
-            if damage_koefficient < 0.7:
-                damage_koefficient = 0.7
+            damage_coefficient = 1 - delta_skill * 0.02
+            if damage_coefficient < 0.7:
+                damage_coefficient = 0.7
         else:
-            damage_koefficient = 1
+            damage_coefficient = 1
 
-        total_damage = int(damage * self.stack * damage_koefficient)
+        total_damage = int(
+            damage * self.stack * damage_coefficient * damage_mult)
 
-        return total_damage
+        return total_damage, physical_damage_log
 
     def get_retaliation(self):
         retaliation = 1
@@ -467,19 +519,18 @@ class BattleUnit(object):
 
         for unit in units.values():
             if coords in unit.coordinates:
+                # cant attack friendly unit
                 if unit.role == self.role:
                     return None, None
 
+                attacker_cell = get_attacker_cell(coords, vectors)
+
                 # ranged attack
                 if 'ranged' in self.special:
-                    return tuple(self.cell_coordinates), unit
+                    return attacker_cell, unit
 
-                attacker_cell = get_attacker_cell(coords, vectors)
+                # melee attack
                 if attacker_cell in possible_cells:
-                    # go back after attack (like Harpy Hag)
-                    if 'strike_and_return' in self.special:
-                        return tuple(self.cell_coordinates), unit
-
                     return attacker_cell, unit
 
         return None, None
@@ -619,6 +670,10 @@ class BattleUnit(object):
     @property
     def attack_specials(self):
         return get_special_methods(attacks_specials, self.special)
+
+    @property
+    def attack_ranged(self):
+        return get_special_methods(attacks_ranged, self.special)
 
     @property
     def attack_casts(self):
