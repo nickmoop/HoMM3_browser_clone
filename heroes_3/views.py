@@ -5,8 +5,8 @@ from django.views.generic.base import TemplateView
 from HoMM3_browser_clone.settings import HOST_NAME
 from heroes_3 import forms
 from heroes_3.models import (
-    Battles, Players, check_username_password, is_logged_in, get_user_by_token,
-    register_new_user, create_battle
+    Battles, Players, is_logged_in, get_user_by_token, register_new_user,
+    create_battle, login_user_by_password
 )
 from heroes_core.Spell import ALL_SPELLS, BattleSpell
 from heroes_core.Unit import (
@@ -29,20 +29,14 @@ class Login(TemplateView):
     template_name = 'login.html'
 
     def post(self, request, *args, **kwargs):
-        form = forms.Login(request.POST)
-        if form.is_valid():
-            user = check_username_password(form)
-            if user:
-                token = get_csrf_token_from_request(request)
-                user.update_user_token(token)
-
-                return JsonResponse(
-                    {'redirect_url': '{}/castle'.format(HOST_NAME)})
-            else:
-                return JsonResponse(
-                    {'error_message': 'wrong use name or password'})
-
-        return JsonResponse({'error_message': 'Invalid form'})
+        result = login_user_by_password(
+            request, token=get_csrf_token_from_request(request))
+        if result:
+            return JsonResponse(
+                {'redirect_url': '{}/castle'.format(HOST_NAME)})
+        else:
+            return JsonResponse(
+                {'error_message': 'wrong use name or password'})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -68,20 +62,14 @@ class Registration(TemplateView):
     template_name = 'registration.html'
 
     def post(self, request, *args, **kwargs):
-        form = forms.Registration(request.POST)
-        if form.is_valid():
-            token = get_csrf_token_from_request(request)
-            if register_new_user(form, token):
-                registration_result = JsonResponse(
-                    {'redirect_url': '{}/castle'.format(HOST_NAME)})
-            else:
-                registration_result = JsonResponse(
-                    {'error_message': 'user name or email already exsist'})
+        result = register_new_user(
+            request, token=get_csrf_token_from_request(request))
+        if result:
+            return JsonResponse(
+                {'redirect_url': '{}/castle'.format(HOST_NAME)})
         else:
-            registration_result = JsonResponse(
-                {'error_message': 'form invalid'})
-
-        return registration_result
+            return JsonResponse(
+                {'error_message': 'user name or email already exsist'})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

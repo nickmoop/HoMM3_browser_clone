@@ -2,8 +2,10 @@ import json
 import re
 
 from django.db import models
+from django.middleware.csrf import get_token
 from django.shortcuts import redirect
 
+from heroes_3 import forms
 from heroes_core.Spell import BattleSpell
 from heroes_core.Unit import BattleUnit
 from heroes_core.helper_methods import (
@@ -129,10 +131,17 @@ class Users(models.Model):
         self.save()
 
 
-def register_new_user(registration_form, token):
-    user_name = registration_form.cleaned_data['user_name']
-    email = registration_form.cleaned_data['email']
-    password = registration_form.cleaned_data['password']
+def register_new_user(request, token=None):
+    form = forms.Registration(request.POST)
+    if not form.is_valid():
+        return None
+
+    if not token:
+        token = get_token(request)
+
+    user_name = form.cleaned_data['user_name']
+    email = form.cleaned_data['email']
+    password = form.cleaned_data['password']
 
     user = Users.objects.filter(user_name=user_name, email=email)
     if user:
@@ -141,8 +150,7 @@ def register_new_user(registration_form, token):
     new_player = Players(nick_name=user_name)
     new_player.save()
     new_user = Users(
-        user_name=user_name, email=email, password=password,
-        player=new_player)
+        user_name=user_name, email=email, password=password, player=new_player)
     new_user.save()
     new_user.update_user_token(token)
 
@@ -177,13 +185,31 @@ def is_logged_in(function):
     return new_func
 
 
+def login_user_by_password(request, token=None):
+    form = forms.Login(request.POST)
+    if not form.is_valid():
+        return None
+
+    user = check_username_password(form)
+    if not user:
+        return None
+
+    if not token:
+        token = get_token(request)
+
+    user.update_user_token(token)
+
+    return token
+
+
 def check_username_password(login_form):
     user_name = login_form.cleaned_data['user_name']
     password = login_form.cleaned_data['password']
-    user = Users.objects.get(user_name=user_name, password=password)
 
-    if not user:
-        return None
+    try:
+        user = Users.objects.get(user_name=user_name, password=password)
+    except Users.DoesNotExist:
+        user = None
 
     return user
 
